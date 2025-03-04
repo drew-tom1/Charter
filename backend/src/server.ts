@@ -1,9 +1,9 @@
-import express from 'express';
+import app from "./app";
 
-const app = express();
+const PORT = process.env.PORT || 5173;
 
-app.listen(3000, () =>
+app.listen(PORT, () =>
   console.log(
-    new Date().toLocaleTimeString() + `: Server is running on port ${3000}...`
+    new Date().toLocaleTimeString() + `: Server is running on port ${PORT}...`
   )
 );

@@ -1,11 +1,13 @@
 {
-    "compilerOptions": {
-      "target": "ES2020",
-      "module": "CommonJS",
-      "rootDir": "./src",
-      "outDir": "./dist",
-      "strict": true,
-      "esModuleInterop": true
-    }
-  }
-  
+  "compilerOptions": {
+    "module": "CommonJS",        // Ensures Node.js compatibility
+    "moduleResolution": "node",  // Resolves modules in a Node.js style
+    "target": "ES6",             // Use ES6 for modern JavaScript features
+    "outDir": "./dist",          // Compiles to the dist folder
+    "rootDir": "./src",          // TypeScript source is in src folder
+    "esModuleInterop": true,     // Allows default import of CommonJS modules
+    "strict": true               // Enforces strict type-checking
+  },
+  "include": ["src/**/*.ts", "src/server.ts"],    // Include all .ts files in src directory
+  "exclude": ["node_modules"]    // Exclude node_modules folder
+}
