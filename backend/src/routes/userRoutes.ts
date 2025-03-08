@@ -1,8 +1,8 @@
 import express from 'express';
 import { initializeAccount } from '../controllers/userController';
 
-const router = express.Router();
+const userRouter = express.Router();
 
-router.post('/add-member', initializeAccount);  // Handles the POST request to add a new member
+userRouter.post('/add-member', initializeAccount);  // Handles the POST request to add a new member
 
-export default router;
+export default userRouter;

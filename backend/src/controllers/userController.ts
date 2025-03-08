@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { createUser } from '../services/userServices';
 
-export const initializeAccount = async (req: Request, res: Response) => {
+export const initializeAccount = async (req: Request, res: Response): Promise<any> => {
   const { name, dues } = req.body;
 
   if (!name || dues === undefined) {

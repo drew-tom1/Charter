@@ -1,6 +1,6 @@
 import supabase from '../utils/supabase';
 
-export const createUser = async (name: string, dues: number) => {
+export const createUser = async (name: string, dues: number): Promise<any> => {
   const { data, error } = await supabase
     .from('members')
     .insert([{ name, dues }])
