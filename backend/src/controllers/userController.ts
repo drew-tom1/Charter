@@ -3,6 +3,7 @@ import { createUser } from '../services/userServices';
 
 export const initializeAccount = async (req: Request, res: Response): Promise<any> => {
   const { name, dues } = req.body;
+  console.log(req.body) // API endpoint is called successfully
 
   if (!name || dues === undefined) {
     return res.status(400).json({ message: 'Name and dues are required' });
