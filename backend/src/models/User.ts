@@ -8,8 +8,15 @@ export interface User {
 }
 
 export const defaultUser: Partial<User> = {
-    uuid: crypto.randomUUID(),
     total_due: 0,
     created_at: new Date(),
     role: "Active",
+}
+
+export function compileUserInfo (name: string, email: string | null): User {
+    return {
+        ...defaultUser as User,
+        name,
+        email,
+    };
 }
