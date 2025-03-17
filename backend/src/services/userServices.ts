@@ -1,8 +1,8 @@
 import supabase from '../utils/supabase';
 import { compileUserInfo, User } from '../models/User';
 
-export const createUser = async (name: string): Promise<any> => {
-  const newUser = await compileUserInfo(name, null)
+export const createUser = async (name: string, email: string): Promise<any> => {
+  const newUser = await compileUserInfo(name, email)
 
   const { data, error } = await supabase
     .from('users')

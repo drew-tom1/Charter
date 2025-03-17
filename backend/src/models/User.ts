@@ -1,19 +1,21 @@
 export interface User {
     uuid: string,
     name: string,
-    email: string | null,
-    total_due: number | null,
+    email: string,
+    total_due: number,
     created_at: Date,
-    role: string | null,
+    role: string,
+    status: string
 }
 
 export const defaultUser: Partial<User> = {
     total_due: 0,
     created_at: new Date(),
-    role: "Active",
+    role: "brother",
+    status: "active"
 }
 
-export function compileUserInfo (name: string, email: string | null): User {
+export function compileUserInfo (name: string, email: string): User {
     return {
         ...defaultUser as User,
         name,

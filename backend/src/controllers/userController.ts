@@ -2,16 +2,22 @@ import { Request, Response } from 'express';
 import { createUser } from '../services/userServices';
 
 export const initializeAccount = async (req: Request, res: Response): Promise<any> => {
-  const { name } = req.body;
+  const { name, email, dues } = req.body;
   console.log(req.body) // API endpoint is called successfully
 
   if (!name) {
-    return res.status(400).json({ message: 'Name are required' });
+    return res.status(400).json({ message: 'Name is required' });
+  }
+  if (!dues) {
+    return res.status(400).json({ message: 'Amount of dues owed is required (Default can be 0)' });
+  }
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required' });
   }
 
   try {
-    const newMember = await createUser(name); // Calls the service to add the user
-    return res.status(201).json({ message: 'Member added successfully', newMember });
+    const newMember = await createUser(name, email); // Calls the service to add the user
+    return res.status(201).json({ message: 'Member added successfully', newMember: name }); // Fix new nember added text
   } catch (err) {
     console.log(err)
     return res.status(500).json({ message: 'An error occurred', err });
