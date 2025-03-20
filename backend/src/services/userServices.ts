@@ -1,5 +1,6 @@
 import supabase from '../utils/supabase';
 import { compileUserInfo, User } from '../models/User';
+import { Transaction } from '../models/Transaction';
 
 export const createUser = async (name: string, email: string, dues: number | null): Promise<any> => {
   const newUser = await compileUserInfo(name, email)
@@ -18,4 +19,14 @@ export const createUser = async (name: string, email: string, dues: number | nul
   if (error) throw new Error(error.message);
 
   return data;  // Return the new member
+};
+
+export const updateUser = async (name: string, dues: number): Promise<any> => {
+  
+
+
+  const { data, error } = await supabase
+    .from('users')
+    .update()
+    .eq('name', name)
 };

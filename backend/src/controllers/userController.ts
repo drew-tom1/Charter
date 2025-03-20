@@ -24,3 +24,23 @@ export const initializeAccount = async (req: Request, res: Response): Promise<an
     return res.status(500).json({ message: 'An error occurred', err });
   }
 };
+
+export const updateAccount = async (req: Request, res: Response): Promise<any> => {
+  const { name, dues } = req.body
+  
+  if (!name) {
+    return res.status(400).json({ message: 'Name is required' });
+  }
+  if (!dues) {
+    return res.status(400).json({ message: 'Amount of dues owed is required' });
+  }
+
+  try {
+
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ message: "An error occurred", err })
+  }
+
+
+}
