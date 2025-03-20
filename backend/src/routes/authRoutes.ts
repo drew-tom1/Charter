@@ -1,7 +1,7 @@
 import { register, login, logout, resetPassword } from "../controllers/authController";
-import Router from 'express';
+import express, { Router } from 'express'
 
-const router = Router()
+const router: Router = express.Router()
 
 router.post('/register', register)
 
