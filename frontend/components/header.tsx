@@ -15,15 +15,13 @@ export default function Header() {
         <NavigationMenu>
             <NavigationMenuList>
                 <NavigationMenuItem>
-                    <Link href="/dashboard">Dashboard</Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                    <NavigationMenuLink>Link</NavigationMenuLink>
-                </NavigationMenuContent>
+                    <Link href="/dashboard">                    
+                        <NavigationMenuLink>
+                            Dashboard
+                        </NavigationMenuLink>   
+                    </Link>
                 </NavigationMenuItem>
             </NavigationMenuList>
-            </NavigationMenu>
+        </NavigationMenu>
     )
 }
