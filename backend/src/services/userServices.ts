@@ -22,7 +22,6 @@ export const createUser = async (name: string, email: string, dues: number | nul
 };
 
 export const retrieveUsers = async (): Promise<any> => {
-  console.log("CHECKPOINT 2")
   const { data, count, error } = await supabase
     .from('users')
     .select('*', { count: 'exact'});
@@ -31,9 +30,7 @@ export const retrieveUsers = async (): Promise<any> => {
     console.error('Error fetching row count:', error)
     return error
   }
-  console.log("CHECKPOINT 3")
-  console.log(count)
-  return data
+  return count
 }
 
 export const updateUser = async (name: string, dues: number): Promise<any> => {

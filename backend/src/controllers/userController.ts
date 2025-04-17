@@ -46,10 +46,9 @@ export const updateAccount = async (req: Request, res: Response): Promise<any> =
 }
 
 export const retrieveTotalMembers = async (req: Request, res: Response): Promise<any> => {
-  console.log("CHECKPOINT 1")
   try {
     const userCount = await retrieveUsers()
-    return res.status(200).json({ message: userCount })
+    return res.status(200).json({ count: userCount })
   } catch (err) {
     console.log(err)
     return res.status(500).json({ message: "An error occurred", err })
