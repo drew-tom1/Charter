@@ -1,8 +1,9 @@
 import express, { Router } from 'express';
-import { ping } from '../controllers/testController';
+import { ping, pingDB } from '../controllers/testController';
 
 const router: Router = express.Router();
 
-router.post("/ping", ping);
+router.get("/ping", ping);
+router.get("/ping-db", pingDB)
 
 export default router;
