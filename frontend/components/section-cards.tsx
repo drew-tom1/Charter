@@ -16,17 +16,19 @@ import { useState, useEffect } from "react";
 export function SectionCards() {
   const [activeMemberCount, setActiveMemberCount] = useState<number | null>(null);
   const [loadingMemberCount, setLoadingMemberCount] = useState(true);
-  const [errorMemberCount, setErrorMemberCount] = useState(Error);
+  const [errorMemberCount, setErrorMemberCount] = useState<Error | null>(null);
 
   useEffect(() => {
     const fetchChapterMemberCount = async () => {
       try {
         const response = await fetch('http://localhost:5173/api/retrieve-user-count');
-        if (!response.ok) {
+        if (!response.ok && response.status !== 304) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const jsonData = await response.json();
-        setActiveMemberCount(jsonData.count); 
+        if (response.status !== 304) {
+          const jsonData = await response.json();
+          setActiveMemberCount(jsonData.count);
+        }
       } catch (err) {
         if (err instanceof Error) {
           setErrorMemberCount(err);
