@@ -106,7 +106,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 
-import semesterTerms from '../helper/semesterTerms.json'
+import memberInfo from '../helper/memberFormInfo.json'
 
 export const schema = z.object({
   id: z.number(),
@@ -118,7 +118,6 @@ export const schema = z.object({
   reviewer: z.string(),
 })
 
-// Create a separate component for the drag handle
 function DragHandle({ id }: { id: number }) {
   const { attributes, listeners } = useSortable({
     id,
@@ -172,7 +171,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
   {
     accessorKey: "header",
-    header: "Transaction Description",
+    header: "Active Member",
     cell: ({ row }) => {
       return <TableCellViewer item={row.original} />
     },
@@ -205,7 +204,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
   {
     accessorKey: "target",
-    header: () => <div className="w-full text-center">Target</div>,
+    header: () => <div className="w-full">Target</div>,
     cell: ({ row }) => (
       <form
         onSubmit={(e) => {
@@ -221,7 +220,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           Target
         </Label>
         <Input
-          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
+          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent shadow-none focus-visible:border dark:bg-transparent"
           defaultValue={row.original.target}
           id={`${row.original.id}-target`}
         />
@@ -230,7 +229,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
   {
     accessorKey: "limit",
-    header: () => <div className="w-full text-center">Limit</div>,
+    header: () => <div className="w-full">Limit</div>,
     cell: ({ row }) => (
       <form
         onSubmit={(e) => {
@@ -246,46 +245,12 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           Limit
         </Label>
         <Input
-          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
+          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent shadow-none focus-visible:border dark:bg-transparent"
           defaultValue={row.original.limit}
           id={`${row.original.id}-limit`}
         />
       </form>
     ),
-  },
-  {
-    accessorKey: "reviewer",
-    header: "Reviewer",
-    cell: ({ row }) => {
-      const isAssigned = row.original.reviewer !== "Assign reviewer"
-
-      if (isAssigned) {
-        return row.original.reviewer
-      }
-
-      return (
-        <>
-          <Label htmlFor={`${row.original.id}-reviewer`} className="sr-only">
-            Reviewer
-          </Label>
-          <Select>
-            <SelectTrigger
-              className="w-38 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
-              size="sm"
-              id={`${row.original.id}-reviewer`}
-            >
-              <SelectValue placeholder="Assign reviewer" />
-            </SelectTrigger>
-            <SelectContent align="end">
-              <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
-              <SelectItem value="Jamik Tashpulatov">
-                Jamik Tashpulatov
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </>
-      )
-    },
   },
   {
     id: "actions",
@@ -798,6 +763,9 @@ function CreateNewMember() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [crossingClass, setCrossingClass] = React.useState('')
   const [status, setStatus] = React.useState('')
+  const [totalBalance, setTotalBalance] = React.useState(0)
+  const [amountPaid, setAmountPaid] = React.useState(0)
+  const [email, setEmail] = React.useState('')
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
@@ -805,7 +773,12 @@ function CreateNewMember() {
 
   const handleCrossingClassChange = (term: string) => {
     setCrossingClass(term);
-    console.log("WORKING", term)
+    console.log(term) // logging in broswer
+  };
+
+  const handleStatusChange = (status: string) => {
+    setStatus(status);
+    console.log(status) // logging in browser
   };
 
   return (
@@ -826,15 +799,19 @@ function CreateNewMember() {
               <Label htmlFor="header">Name</Label>
               <Input id="header" />
             </div>
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="header">Email</Label>
+              <Input id="header" />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
                 <Label htmlFor="type">Crossing Class</Label>
                 <Select onValueChange={handleCrossingClassChange}>
                   <SelectTrigger id="type" className="w-full">
-                    <SelectValue placeholder="Select a type" />
+                    <SelectValue placeholder="Select class" />
                   </SelectTrigger>
                   <SelectContent>
-                    {semesterTerms.terms.map((term) => (
+                    {memberInfo.terms.map((term) => (
                       <SelectItem key={term} value={term}>
                         {term}
                       </SelectItem>
@@ -844,42 +821,29 @@ function CreateNewMember() {
               </div>
               <div className="flex flex-col gap-3">
                 <Label htmlFor="status">Status</Label>
-                <Select >
+                <Select onValueChange={handleStatusChange}>
                   <SelectTrigger id="status" className="w-full">
                     <SelectValue placeholder="Select a status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Active">Active</SelectItem>
-                    <SelectItem value="Inactive">Inactive</SelectItem>
-                    <SelectItem value="CoOp StudyAbroad">Co-Op / Study Abroad</SelectItem>
+                    {memberInfo.statuses.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {status}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" />
+                <Label htmlFor="email">Amount Paid</Label>
+                <Input id="email" placeholder="opt."/>
               </div>
               <div className="flex flex-col gap-3">
-                <Label htmlFor="limit">Limit</Label>
-                <Input id="limit" />
+                <Label htmlFor="limit">Total Balance</Label>
+                <Input id="limit" placeholder="opt."/>
               </div>
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="reviewer">Reviewer</Label>
-              <Select>
-                <SelectTrigger id="reviewer" className="w-full">
-                  <SelectValue placeholder="Select a reviewer" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
-                  <SelectItem value="Jamik Tashpulatov">
-                    Jamik Tashpulatov
-                  </SelectItem>
-                  <SelectItem value="Emily Whalen">Emily Whalen</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
           </form>
         </div>

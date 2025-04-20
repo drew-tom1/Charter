@@ -7,5 +7,10 @@
       "Spring 2024",
       "Fall 2024",
       "Spring 2025"
+    ],
+    "statuses": [
+      "Active",
+      "Inactive",
+      "Co-Op / Study Abroad"
     ]
-  }
+}
