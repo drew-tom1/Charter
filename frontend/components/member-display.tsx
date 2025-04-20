@@ -106,6 +106,8 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 
+import semesterTerms from '../helper/semesterTerms.json'
+
 export const schema = z.object({
   id: z.number(),
   header: z.string(),
@@ -794,6 +796,8 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
 function CreateNewMember() {
   const isMobile = useIsMobile()
   const [isOpen, setIsOpen] = React.useState(false);
+  const [crossingClass, setCrossingClass] = React.useState('')
+  const [status, setStatus] = React.useState('')
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
@@ -819,18 +823,17 @@ function CreateNewMember() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="type">Type</Label>
+                <Label htmlFor="type">Crossing Class</Label>
                 <Select>
                   <SelectTrigger id="type" className="w-full">
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Table of Contents">
-                      Credit
-                    </SelectItem>
-                    <SelectItem value="Executive Summary">
-                      Debit
-                    </SelectItem>
+                    {semesterTerms.terms.map((term) => (
+                      <SelectItem key={term} value={term} onClick={() => setCrossingClass(term)}>
+                        {term}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -841,9 +844,9 @@ function CreateNewMember() {
                     <SelectValue placeholder="Select a status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Done">Done</SelectItem>
-                    <SelectItem value="In Progress">In Progress</SelectItem>
-                    <SelectItem value="Not Started">Not Started</SelectItem>
+                    <SelectItem value="Active">Active</SelectItem>
+                    <SelectItem value="Inactive">Inactive</SelectItem>
+                    <SelectItem value="CoOp StudyAbroad">Co-Op / Study Abroad</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
