@@ -803,6 +803,11 @@ function CreateNewMember() {
     setIsOpen(open);
   };
 
+  const handleCrossingClassChange = (term: string) => {
+    setCrossingClass(term);
+    console.log("WORKING", term)
+  };
+
   return (
     <Drawer open={isOpen} onOpenChange={handleOpenChange} direction={isMobile ? "bottom" : "right"}>
       <DrawerTrigger asChild>
@@ -824,13 +829,13 @@ function CreateNewMember() {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
                 <Label htmlFor="type">Crossing Class</Label>
-                <Select>
+                <Select onValueChange={handleCrossingClassChange}>
                   <SelectTrigger id="type" className="w-full">
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
                   <SelectContent>
                     {semesterTerms.terms.map((term) => (
-                      <SelectItem key={term} value={term} onClick={() => setCrossingClass(term)}>
+                      <SelectItem key={term} value={term}>
                         {term}
                       </SelectItem>
                     ))}
@@ -853,8 +858,8 @@ function CreateNewMember() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="target">Target</Label>
-                <Input id="target" />
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" />
               </div>
               <div className="flex flex-col gap-3">
                 <Label htmlFor="limit">Limit</Label>
