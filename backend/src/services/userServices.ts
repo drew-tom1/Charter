@@ -2,7 +2,7 @@ import supabase from '../utils/supabase';
 import { compileUserInfo, User } from '../models/User';
 import { Transaction } from '../models/Transaction';
 
-export const createUser = async (name: string, email: string, dues: number | null): Promise<any> => {
+export const createUser = async (name: string, email: string, dues: number): Promise<any> => {
   const newUser = await compileUserInfo(name, email)
 
   if (dues) { // fold this into compileUserInfo function at a later date. Functionality is separate.

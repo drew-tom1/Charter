@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import axios from "axios"
 import {
   DndContext,
   KeyboardSensor,
@@ -766,6 +767,7 @@ function CreateNewMember() {
   const [totalBalance, setTotalBalance] = React.useState(0)
   const [amountPaid, setAmountPaid] = React.useState(0)
   const [email, setEmail] = React.useState('')
+  const [name, setName] = React.useState('')
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
@@ -773,13 +775,31 @@ function CreateNewMember() {
 
   const handleCrossingClassChange = (term: string) => {
     setCrossingClass(term);
-    console.log(term) // logging in broswer
   };
 
   const handleStatusChange = (status: string) => {
     setStatus(status);
-    console.log(status) // logging in browser
   };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const newUser = {
+      name,
+      email,
+      amountPaid,
+      totalBalance,
+      status,
+      crossingClass
+    }
+
+    try {
+      await axios.post("http://localhost:5173/add-new-member")
+    } catch (err) {
+
+    }
+    console.log(newUser)
+  }
 
   return (
     <Drawer open={isOpen} onOpenChange={handleOpenChange} direction={isMobile ? "bottom" : "right"}>
@@ -794,15 +814,23 @@ function CreateNewMember() {
           <DrawerTitle>Create New Active Member</DrawerTitle>
         </DrawerHeader>
         <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-          <form className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="header">Name</Label>
-              <Input id="header" />
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="header">Email</Label>
-              <Input id="header" />
-            </div>
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
                 <Label htmlFor="type">Crossing Class</Label>
@@ -836,19 +864,31 @@ function CreateNewMember() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="email">Amount Paid</Label>
-                <Input id="email" placeholder="opt."/>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="limit">Total Balance</Label>
-                <Input id="limit" placeholder="opt."/>
-              </div>
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="amountPaid">Amount Paid</Label>
+              <Input
+                id="amountPaid"
+                placeholder="opt."
+                type="number"
+                value={amountPaid}
+                onChange={(e) => setAmountPaid(Number(e.target.value))}
+              />
             </div>
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="totalBalance">Total Balance</Label>
+              <Input
+                id="totalBalance"
+                placeholder="opt."
+                type="number"
+                value={totalBalance}
+                onChange={(e) => setTotalBalance(Number(e.target.value))}
+              />
+            </div>
+            </div>
+            <Button type="submit">Submit</Button>
           </form>
         </div>
         <DrawerFooter>
-          <Button>Submit</Button>
           <DrawerClose asChild>
             <Button variant="outline">Done</Button>
           </DrawerClose>
