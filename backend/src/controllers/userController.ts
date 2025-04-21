@@ -1,23 +1,27 @@
 import { Request, Response } from 'express';
 import { createUser, retrieveUsers } from '../services/userServices';
 import { validateEmail } from '../utils/helper';
+import { User } from '../models/User';
 
-export const initializeAccount = async (req: Request, res: Response): Promise<any> => {
-  const { name, email, dues } = req.body;
+export const initializeAccount = async (req: Request<{}, {}, User>, res: Response): Promise<any> => {
+  const { name, email, amount_paid, total_balance, crossing_class, status } = req.body;
   console.log(req.body) // API endpoint is called successfully
 
   if (!name) {
     return res.status(400).json({ message: 'Name is required' });
   }
-  if (!dues) {
-    return res.status(400).json({ message: 'Amount of dues owed is required (Default can be 0)' });
-  }
   if (!email || !validateEmail(email)) {
     return res.status(400).json({ message: 'Email is required and/or incorrectly formatted.' });
   }
+  if (!status) {
+    return res.status(400).json({ message: 'Status is required' });
+  }
+  if (!crossing_class) {
+    return res.status(400).json({ message: 'Crossing Class is required' });
+  }
 
   try {
-    await createUser(name, email, dues); // Calls the service to add the user
+    await createUser(req.body); // Calls the service to add the user
     return res.status(201).json({ message: 'Member added successfully', newMember: name }); // Fix new nember added text
   } catch (err) {
     console.log(err)

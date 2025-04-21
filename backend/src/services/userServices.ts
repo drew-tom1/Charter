@@ -2,15 +2,12 @@ import supabase from '../utils/supabase';
 import { compileUserInfo, User } from '../models/User';
 import { Transaction } from '../models/Transaction';
 
-export const createUser = async (name: string, email: string, dues: number): Promise<any> => {
-  const newUser = await compileUserInfo(name, email)
+export const createUser = async (user: User): Promise<any> => {
+  const { name, email, amount_paid, total_balance, crossing_class, status } = user
+  const newUser = await compileUserInfo(name, email, amount_paid, total_balance, crossing_class, status)
 
-  if (dues) { // fold this into compileUserInfo function at a later date. Functionality is separate.
-    newUser.total_due += dues
-  }
-  console.log(dues)
-  console.log(newUser.total_due)
-
+  console.log(newUser)
+  
   const { data, error } = await supabase
     .from('users')
     .insert([{ ...newUser }])

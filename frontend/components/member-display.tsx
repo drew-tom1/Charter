@@ -787,16 +787,17 @@ function CreateNewMember() {
     const newUser = {
       name,
       email,
-      amountPaid,
-      totalBalance,
-      status,
-      crossingClass
+      amount_paid: amountPaid,
+      total_balance: totalBalance,
+      status: status.toLowerCase(),
+      crossing_class: crossingClass 
     }
 
     try {
-      await axios.post("http://localhost:5173/add-new-member")
+      await axios.post("http://localhost:5173/api/add-member", newUser)
+      console.log("Success!")
     } catch (err) {
-
+      console.log("Failed")
     }
     console.log(newUser)
   }
