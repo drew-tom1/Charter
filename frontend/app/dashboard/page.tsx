@@ -11,16 +11,19 @@ import {
 
 import testData from "./testData.json" 
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import useUserData from "@/hooks/use-retriever"
 import useListRetriever from "@/hooks/use-retriever"
 
 export default function Page() {
-  const { data, loading, error } = useListRetriever()
+  const { data: fetchedData, loading, error } = useListRetriever()
 
   if (error) {
     console.log("Something went wrong. (useListRetriever inside Dashboard)")
     console.log(error)
   }
+
+  
 
 
   return (
@@ -39,7 +42,15 @@ export default function Page() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <SectionCards />
-              <DataTable data={data} />
+              {loading ? (
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="h-" />
+                </div>
+              ) : fetchedData ? (
+                <DataTable data={fetchedData} />
+              ) : (
+                <div>No member data available.</div>
+              )}
             </div>
           </div>
         </div>
