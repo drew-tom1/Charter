@@ -1,3 +1,5 @@
+"use client"
+
 import { AppSidebar } from "@/components/app-sidebar"
 import { DataTable } from "@/components/member-display"
 import { SectionCards } from "@/components/section-cards"
@@ -8,8 +10,13 @@ import {
 } from "@/components/ui/sidebar"
 
 import data from "./data.json"
+import { Button } from "@/components/ui/button"
+import useUserData from "@/hooks/use-data"
 
 export default function Page() {
+  const { data, loading, error} = useUserData
+
+
   return (
     <SidebarProvider
       style={
@@ -27,6 +34,7 @@ export default function Page() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <SectionCards />
               <DataTable data={data} />
+              <Button>Test Button</Button>
             </div>
           </div>
         </div>

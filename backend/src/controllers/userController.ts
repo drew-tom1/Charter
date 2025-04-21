@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createUser, retrieveUsers } from '../services/userServices';
+import { createUser, retrieveUserCount, retrieveUsers } from '../services/userServices';
 import { validateEmail } from '../utils/helper';
 import { User } from '../models/User';
 
@@ -51,8 +51,18 @@ export const updateAccount = async (req: Request, res: Response): Promise<any> =
 
 export const retrieveTotalMembers = async (req: Request, res: Response): Promise<any> => {
   try {
-    const userCount = await retrieveUsers()
+    const userCount = await retrieveUserCount()
     return res.status(200).json({ count: userCount })
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ message: "An error occurred", err })
+  }
+}
+
+export const retrieveMemberList = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const usersList = await retrieveUsers()
+    return res.status(200).json({ usersList })
   } catch (err) {
     console.log(err)
     return res.status(500).json({ message: "An error occurred", err })

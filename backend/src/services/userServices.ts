@@ -18,7 +18,7 @@ export const createUser = async (user: User): Promise<any> => {
   return data;  // Return the new member
 };
 
-export const retrieveUsers = async (): Promise<any> => {
+export const retrieveUserCount = async (): Promise<any> => {
   const { data, count, error } = await supabase
     .from('users')
     .select('*', { count: 'exact'});
@@ -28,6 +28,18 @@ export const retrieveUsers = async (): Promise<any> => {
     return error
   }
   return count
+}
+
+export const retrieveUsers = async (): Promise<any> => {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*');
+
+  if (error) {
+    console.error('Error fetching row count:', error)
+    return error
+  }
+  return data
 }
 
 export const updateUser = async (name: string, dues: number): Promise<any> => {

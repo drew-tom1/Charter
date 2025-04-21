@@ -768,6 +768,8 @@ function CreateNewMember() {
   const [amountPaid, setAmountPaid] = React.useState(0)
   const [email, setEmail] = React.useState('')
   const [name, setName] = React.useState('')
+  const [submissionStatus, setSubmissionStatus] = React.useState<"success" | "error" | null>(null)
+
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
@@ -779,6 +781,17 @@ function CreateNewMember() {
 
   const handleStatusChange = (status: string) => {
     setStatus(status);
+  };
+
+  const handleReset = () => {
+    setName('');
+    setEmail('');
+    setAmountPaid(0);
+    setTotalBalance(0);
+    setCrossingClass('');
+    setStatus('');
+    setSubmissionStatus(null);
+    setIsOpen(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -795,9 +808,9 @@ function CreateNewMember() {
 
     try {
       await axios.post("http://localhost:5173/api/add-member", newUser)
-      console.log("Success!")
+      setSubmissionStatus("success");
     } catch (err) {
-      console.log("Failed")
+      setSubmissionStatus("error");
     }
     console.log(newUser)
   }
@@ -888,10 +901,16 @@ function CreateNewMember() {
             </div>
             <Button type="submit">Submit</Button>
           </form>
+          {submissionStatus === "success" && (
+            <p className="text-green-600">Member added successfully!</p>
+          )}
+          {submissionStatus === "error" && (
+            <p className="text-red-600">Something went wrong. Please try again.</p>
+          )}
         </div>
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outline">Done</Button>
+            <Button variant="outline" onClick={handleReset}>Done</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
