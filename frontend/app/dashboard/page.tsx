@@ -9,12 +9,18 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 
-import data from "./data.json"
+import testData from "./testData.json" 
 import { Button } from "@/components/ui/button"
-import useUserData from "@/hooks/use-data"
+import useUserData from "@/hooks/use-retriever"
+import useListRetriever from "@/hooks/use-retriever"
 
 export default function Page() {
-  const { data, loading, error} = useUserData
+  const { data, loading, error } = useListRetriever()
+
+  if (error) {
+    console.log("Something went wrong. (useListRetriever inside Dashboard)")
+    console.log(error)
+  }
 
 
   return (
