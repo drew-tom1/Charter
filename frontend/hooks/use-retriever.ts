@@ -10,7 +10,7 @@ export const memberSchema = z.object({
   crossing_class: z.string(),
   total_balance: z.number(),
   amount_paid: z.number(),
-  created_at: z.coerce.date(),
+  created_at: z.string(),
 })
 
 const memberArraySchema = z.array(memberSchema);

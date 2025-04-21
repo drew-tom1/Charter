@@ -110,6 +110,7 @@ import {
 import memberInfo from '../helper/memberFormInfo.json'
 import { memberSchema } from "@/hooks/use-retriever"
 
+
 function DragHandle({ id }: { id: string }) {
   const { attributes, listeners } = useSortable({
     id,
@@ -164,13 +165,17 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
   {
     accessorKey: "name",
     header: "Active Member",
-    cell: ({ row }) => {
-      {row.original.name}//return <TableCellViewer item={row.original} />
-    },
+    cell: ({ row }) => (
+      <div className="w-32">
+        <Badge variant="outline" className="text-muted-foreground px-1.5">
+          {row.original.name}
+        </Badge>
+      </div>
+    ),
     enableHiding: false,
   },
   {
-    accessorKey: "type",
+    accessorKey: "crossing_class",
     header: "Crossing Class",
     cell: ({ row }) => (
       <div className="w-32">
@@ -195,8 +200,8 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
     ),
   },
   {
-    accessorKey: "target",
-    header: () => <div className="w-full">Target</div>,
+    accessorKey: "amount_paid",
+    header: () => <div className="w-full">Amount Paid</div>,
     cell: ({ row }) => (
       <form
         onSubmit={(e) => {
@@ -208,20 +213,20 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
           })
         }}
       >
-        <Label htmlFor={`${row.original.id}-target`} className="sr-only">
-          Target
+        <Label htmlFor={`${row.original.id}-amount_paid`} className="sr-only">
+          Amount Paid
         </Label>
         <Input
           className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent shadow-none focus-visible:border dark:bg-transparent"
           defaultValue={row.original.amount_paid}
-          id={`${row.original.id}-target`}
+          id={`${row.original.id}-amount_paid`}
         />
       </form>
     ),
   },
   {
-    accessorKey: "limit",
-    header: () => <div className="w-full">Limit</div>,
+    accessorKey: "total_balance",
+    header: () => <div className="w-full">Total Balance</div>,
     cell: ({ row }) => (
       <form
         onSubmit={(e) => {
@@ -233,13 +238,13 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
           })
         }}
       >
-        <Label htmlFor={`${row.original.id}-limit`} className="sr-only">
-          Limit
+        <Label htmlFor={`${row.original.id}-total_balance`} className="sr-only">
+          Total Balance
         </Label>
         <Input
           className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent shadow-none focus-visible:border dark:bg-transparent"
           defaultValue={row.original.total_balance}
-          id={`${row.original.id}-limit`}
+          id={`${row.original.id}-total_balance`}
         />
       </form>
     ),

@@ -40,7 +40,6 @@ export default function Page() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <SectionCards />
               <DataTable data={data} />
-              <Button>Test Button</Button>
             </div>
           </div>
         </div>
