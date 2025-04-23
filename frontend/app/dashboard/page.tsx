@@ -24,6 +24,7 @@ export default function Page() {
   const triggerRefresh = useCallback(() => {
     console.log("Page refresh triggered from useListen hook: ")
     refetch()
+    window.location.reload()
   }, [])
 
   useListen(triggerRefresh)
