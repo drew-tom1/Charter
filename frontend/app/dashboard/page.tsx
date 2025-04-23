@@ -19,13 +19,14 @@ import { useListen } from "@/hooks/use-listen"
 import supabase from "@/utils/supabase"
 
 export default function Page() {
-  const { data: fetchedData, loading, error } = useListRetriever()
+  const { data: fetchedData, loading, error, refetch } = useListRetriever()
 
-  const handleDataChanges = useCallback((payload: any) => {
-    console.log("useListen triggered with payload: ", payload)
+  const triggerRefresh = useCallback(() => {
+    console.log("Page refresh triggered from useListen hook: ")
+    refetch()
   }, [])
 
-  useListen(handleDataChanges)
+  useListen(triggerRefresh)
 
   if (error) {
     console.log("Something went wrong. (useListRetriever inside Dashboard)")

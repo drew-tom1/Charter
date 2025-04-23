@@ -2,16 +2,19 @@ import supabase from "@/utils/supabase";
 import { useEffect } from "react";
 import { RealtimeChannel } from "@supabase/supabase-js";
 
-type DataChangeCallback = (payload: any) => void;
+type TriggerCallback = () => void;
 
-export const useListen = (onDataChange: DataChangeCallback) => { //rename variables for clarity later
+export const useListen = (onTrigger: TriggerCallback) => { //rename variables for clarity later
     let dashboardChanges: RealtimeChannel | null = null;
 
     useEffect(() => {
         const subscribetoChannel = async () => {
             dashboardChanges = await supabase
             .channel('dashboard-changes')
-            .on('postgres_changes', {event: '*', schema: 'public' }, (payload) => {return payload})
+            .on('postgres_changes', {event: '*', schema: 'public' }, (payload) => {
+                console.log(payload)
+                onTrigger()
+            })
             .subscribe()  
 
             await dashboardChanges
@@ -26,5 +29,5 @@ export const useListen = (onDataChange: DataChangeCallback) => { //rename variab
               console.log('Unsubscribed from dashboard changes.');
             }      
         }
-    }, [onDataChange])
+    }, [onTrigger])
 }
