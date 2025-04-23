@@ -14,9 +14,18 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import useUserData from "@/hooks/use-retriever"
 import useListRetriever from "@/hooks/use-retriever"
+import { useCallback } from "react"
+import { useListen } from "@/hooks/use-listen"
+import supabase from "@/utils/supabase"
 
 export default function Page() {
   const { data: fetchedData, loading, error } = useListRetriever()
+
+  const handleDataChanges = useCallback((payload: any) => {
+    console.log("useListen triggered with payload: ", payload)
+  }, [])
+
+  useListen(handleDataChanges)
 
   if (error) {
     console.log("Something went wrong. (useListRetriever inside Dashboard)")

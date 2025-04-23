@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { z } from "zod";
 
@@ -25,8 +25,7 @@ const useListRetriever = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
       try {
         const result = await axios.get<APIResponse>("http://localhost:5173/api/retrieve-user-list");
         const validated = memberArraySchema.parse(result.data.usersList);
@@ -44,12 +43,13 @@ const useListRetriever = () => {
       } finally {
         setLoading(false);
       }
-    };
+    }, []);
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    fetchData()
+  }, [fetchData]);
 
-  return { data, loading, error };
+  return { data, loading, error, refetch: fetchData };
 };
 
 export default useListRetriever;
