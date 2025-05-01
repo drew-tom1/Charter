@@ -109,6 +109,7 @@ import {
 
 import memberInfo from '../helper/memberFormInfo.json'
 import { memberSchema } from "@/hooks/use-retriever"
+import useDelete from "@/hooks/use-delete"
 
 
 function DragHandle({ id }: { id: string }) {
@@ -251,7 +252,7 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
   },
   {
     id: "actions",
-    cell: () => (
+    cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -264,11 +265,9 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
+          <DropdownMenuItem>Edit balance(s)</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+          <DropdownMenuItem variant="destructive" onClick={() => useDelete(row.original.id)}>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),

@@ -49,3 +49,12 @@ export const updateUser = async (name: string, dues: number): Promise<any> => {
     .update()
     .eq('name', name)
 };
+
+export const deleteUser = async (id: string): Promise<any> => {
+  const { data, error } = await supabase
+    .from('users')
+    .delete()
+    .eq('id', id)
+
+  return { data, error }
+}

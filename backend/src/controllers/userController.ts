@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createUser, retrieveUserCount, retrieveUsers } from '../services/userServices';
+import { createUser, deleteUser, retrieveUserCount, retrieveUsers } from '../services/userServices';
 import { validateEmail } from '../utils/helper';
 import { User } from '../models/User';
 
@@ -43,6 +43,22 @@ export const updateAccount = async (req: Request, res: Response): Promise<any> =
 
   } catch (err) {
     console.log(err)
+    return res.status(500).json({ message: "An error occurred", err })
+  }
+
+
+}
+
+export const deleteAccount = async (req: Request, res: Response): Promise<any> => {
+  const { id } = req.body
+  
+  if (!id) {
+    return res.status(400).json({ message: 'ID is required' });
+  }
+
+  try {
+    await deleteUser(id)
+  } catch (err) {
     return res.status(500).json({ message: "An error occurred", err })
   }
 
