@@ -252,7 +252,10 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => (
+    cell: ({ row }) => {
+      const handleDelete = useDelete(row.original.id)
+
+    return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -267,10 +270,10 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
         <DropdownMenuContent align="end" className="w-32">
           <DropdownMenuItem>Edit balance(s)</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive" onClick={() => useDelete(row.original.id)}>Delete</DropdownMenuItem>
+          <DropdownMenuItem variant="destructive" onClick={() => handleDelete()}>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    ),
+    )},
   },
 ]
 

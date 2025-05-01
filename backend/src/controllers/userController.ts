@@ -50,7 +50,7 @@ export const updateAccount = async (req: Request, res: Response): Promise<any> =
 }
 
 export const deleteAccount = async (req: Request, res: Response): Promise<any> => {
-  const { id } = req.body
+  const { id } = req.params
   
   if (!id) {
     return res.status(400).json({ message: 'ID is required' });

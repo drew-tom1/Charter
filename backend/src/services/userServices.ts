@@ -51,6 +51,7 @@ export const updateUser = async (name: string, dues: number): Promise<any> => {
 };
 
 export const deleteUser = async (id: string): Promise<any> => {
+  console.log(id)
   const { data, error } = await supabase
     .from('users')
     .delete()
