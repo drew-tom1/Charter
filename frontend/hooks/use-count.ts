@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export default function useCount() {
-    const [totalMemberCount, setActiveMemberCount] = useState<number | null>(null);
+    const [totalMemberCount, setTotalMemberCount] = useState<number | null>(null);
     const [loadingMemberCount, setLoadingMemberCount] = useState(true);
     const [errorMemberCount, setErrorMemberCount] = useState<Error | null>(null);
   
@@ -14,7 +14,7 @@ export default function useCount() {
           }
           if (response.status !== 304) {
             const jsonData = await response.json();
-            setActiveMemberCount(jsonData.count);
+            setTotalMemberCount(jsonData.count);
           }
         } catch (err) {
           if (err instanceof Error) {
@@ -31,5 +31,5 @@ export default function useCount() {
       fetchChapterMemberCount();
     }, []);
 
-    return {totalMemberCount, loadingMemberCount, errorMemberCount }
+    return { totalMemberCount, loadingMemberCount, errorMemberCount }
 }
