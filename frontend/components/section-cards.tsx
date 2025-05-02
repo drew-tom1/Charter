@@ -40,7 +40,7 @@ export function SectionCards() {
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Active Brothers</CardDescription>
+          <CardDescription>Total Brothers</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {loadingMembers ? (
               "Loading..."
@@ -49,7 +49,7 @@ export function SectionCards() {
             ) : memberCount !== null ? (
               `${memberCount}`
             ) : (
-              "$0.00"
+              "0"
             )}
           </CardTitle>
           <CardAction>

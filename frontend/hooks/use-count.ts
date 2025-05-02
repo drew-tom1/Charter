@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export default function useCount() {
-    const [activeMemberCount, setActiveMemberCount] = useState<number | null>(null);
+    const [totalMemberCount, setActiveMemberCount] = useState<number | null>(null);
     const [loadingMemberCount, setLoadingMemberCount] = useState(true);
     const [errorMemberCount, setErrorMemberCount] = useState<Error | null>(null);
   
@@ -31,5 +31,5 @@ export default function useCount() {
       fetchChapterMemberCount();
     }, []);
 
-    return {activeMemberCount, loadingMemberCount, errorMemberCount }
+    return {totalMemberCount, loadingMemberCount, errorMemberCount }
 }
