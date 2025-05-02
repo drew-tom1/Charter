@@ -16,23 +16,12 @@ import { useCallback } from "react"
 import { useListen } from "@/hooks/use-listen"
 
 export default function Page() {
-  const { data: fetchedData, loading, error, refetch } = useListRetriever()
-
-  const triggerRefresh = useCallback(() => {
-    console.log("Page refresh triggered from useListen hook: ")
-    refetch()
-    window.location.reload() // NAIVE METHOD
-  }, [])
-
-  useListen(triggerRefresh)
+  const { data: fetchedData, loading, error } = useListRetriever()
 
   if (error) {
     console.log("Something went wrong. (useListRetriever inside Dashboard)")
     console.log(error)
   }
-
-  
-
 
   return (
     <SidebarProvider

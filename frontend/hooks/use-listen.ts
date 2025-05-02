@@ -1,19 +1,20 @@
 import supabase from "@/utils/supabase";
 import { useEffect } from "react";
-import { RealtimeChannel } from "@supabase/supabase-js";
+import { RealtimeChannel, RealtimePostgresChangesPayload } from "@supabase/supabase-js";
+import { User } from "@/helper/userModel";
 
-type TriggerCallback = () => void;
+type TriggerCallback = (payload: RealtimePostgresChangesPayload<User>) => void;
 
-export const useListen = (onTrigger: TriggerCallback) => { //rename variables for clarity later
+export const useListen = (onTrigger: TriggerCallback) => { // rename variables for clarity later
     let dashboardChanges: RealtimeChannel | null = null;
 
     useEffect(() => {
         const subscribetoChannel = async () => {
             dashboardChanges = await supabase
             .channel('dashboard-changes')
-            .on('postgres_changes', {event: '*', schema: 'public' }, (payload) => {
+            .on('postgres_changes', {event: '*', schema: 'public' }, (payload: RealtimePostgresChangesPayload<User>) => {
                 console.log(payload)
-                onTrigger()
+                onTrigger(payload)
             })
             .subscribe()  
 

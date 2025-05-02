@@ -110,6 +110,7 @@ import {
 import memberInfo from '../helper/memberFormInfo.json'
 import { memberSchema } from "@/hooks/use-retriever"
 import useDelete from "@/hooks/use-delete"
+import { useListen } from "@/hooks/use-listen"
 
 
 function DragHandle({ id }: { id: string }) {
@@ -303,7 +304,6 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof memberSchema>> }) {
 }
 
 export function DataTable({ data: initialData, }: { data: z.infer<typeof memberSchema>[]}) {
-  
   const [data, setData] = React.useState(() => initialData)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
@@ -351,6 +351,16 @@ export function DataTable({ data: initialData, }: { data: z.infer<typeof memberS
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+  })
+
+  useListen((payload) => {
+    if (payload.table === 'users') {
+      if (payload.eventType === 'INSERT') {
+        setData(prevData => [...prevData, payload.new]);
+      } else if (payload.eventType === 'DELETE') {
+          setData(prevMembers => prevMembers.filter(member => member.id !== payload.old.id));
+      }
+    }
   })
 
   function handleDragEnd(event: DragEndEvent) {
