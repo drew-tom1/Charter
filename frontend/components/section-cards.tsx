@@ -12,37 +12,11 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { useState, useEffect } from "react";
+import useCount from "@/hooks/use-count";
 
 export function SectionCards() {
-  const [activeMemberCount, setActiveMemberCount] = useState<number | null>(null);
-  const [loadingMemberCount, setLoadingMemberCount] = useState(true);
-  const [errorMemberCount, setErrorMemberCount] = useState<Error | null>(null);
+  const { activeMemberCount: memberCount, loadingMemberCount: loadingMembers, errorMemberCount: memberError } = useCount()
 
-  useEffect(() => {
-    const fetchChapterMemberCount = async () => {
-      try {
-        const response = await fetch('http://localhost:5173/api/retrieve-user-count');
-        if (!response.ok && response.status !== 304) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        if (response.status !== 304) {
-          const jsonData = await response.json();
-          setActiveMemberCount(jsonData.count);
-        }
-      } catch (err) {
-        if (err instanceof Error) {
-          setErrorMemberCount(err);
-        } else {
-          console.error("An unexpected error occurred:", err);
-          setErrorMemberCount(new Error("An unexpected error occurred."));
-        }
-      } finally {
-        setLoadingMemberCount(false);
-      }
-    };
-
-    fetchChapterMemberCount();
-  }, []);
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card">
@@ -68,12 +42,12 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Total Active Brothers</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {loadingMemberCount ? (
+            {loadingMembers ? (
               "Loading..."
-            ) : errorMemberCount ? (
+            ) : memberError ? (
               "Error"
-            ) : activeMemberCount !== null ? (
-              `${activeMemberCount}`
+            ) : memberCount !== null ? (
+              `${memberCount}`
             ) : (
               "$0.00"
             )}
