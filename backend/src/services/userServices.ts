@@ -19,7 +19,7 @@ export const createUser = async (user: User): Promise<any> => {
 };
 
 export const retrieveUserCount = async (): Promise<any> => {
-  const { data, count, error } = await supabase
+  const { count, error } = await supabase
     .from('users')
     .select('*', { count: 'exact'});
 
@@ -30,7 +30,44 @@ export const retrieveUserCount = async (): Promise<any> => {
   return count
 }
 
-export const retrieveUsers = async (): Promise<any> => {
+export const retrieveOutstandingBalance = async (): Promise<any> => {
+  const { count, error } = await supabase
+    .from('users')
+    .select('*', { count: 'exact'});
+
+  if (error) {
+    console.error('Error fetching row count:', error)
+    return error
+  }
+  return count
+}
+
+export const retrieveAvailableFunds = async (): Promise<any> => {
+  const { count, error } = await supabase
+    .from('users')
+    .select('*', { count: 'exact'});
+
+  if (error) {
+    console.error('Error fetching row count:', error)
+    return error
+  }
+  return count
+}
+
+export const retrieveTotalBalance = async (): Promise<any> => {
+  const { data, error } = await supabase
+    .from('chapter_funds')
+    .select('total_funds_possible')
+    .single();
+
+  if (error) {
+    console.error('Error fetching total funds:', error)
+    return error
+  }
+  return data
+}
+
+export const retrieveListOfUsers = async (): Promise<any> => {
   const { data, error } = await supabase
     .from('users')
     .select('*');

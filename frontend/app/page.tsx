@@ -17,7 +17,7 @@ export default function Home() {
       </div>
 
       <Image src={outlinelogo_removebg_preview} alt="Theta Tau Logo" width={170} height={170} />
-      <Link href="/login">
+      <Link href="/dashboard"> 
         <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Login
         </button>
