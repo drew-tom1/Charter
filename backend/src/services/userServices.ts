@@ -30,28 +30,17 @@ export const retrieveUserCount = async (): Promise<any> => {
   return count
 }
 
-export const retrieveOutstandingBalance = async (): Promise<any> => {
-  const { count, error } = await supabase
-    .from('users')
-    .select('*', { count: 'exact'});
-
-  if (error) {
-    console.error('Error fetching row count:', error)
-    return error
-  }
-  return count
-}
-
 export const retrieveAvailableFunds = async (): Promise<any> => {
-  const { count, error } = await supabase
-    .from('users')
-    .select('*', { count: 'exact'});
+  const { data, error } = await supabase
+    .from('chapter_funds')
+    .select('current_funds')
+    .single();
 
   if (error) {
     console.error('Error fetching row count:', error)
     return error
   }
-  return count
+  return data
 }
 
 export const retrieveTotalBalance = async (): Promise<any> => {

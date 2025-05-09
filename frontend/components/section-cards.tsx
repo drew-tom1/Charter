@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
 import useCount from "@/hooks/use-count";
 
 export function SectionCards() {
-  const { totalMemberCount: memberCount, loadingMemberCount: loadingMembers, errorMemberCount: memberError } = useCount()
+  const { netFunds, totalFunds, outstandingBalance, memberCount, loading, error } = useCount()
 
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
@@ -23,7 +23,15 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Net Chapter Funds</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            N/A
+            {loading ? (
+              "Loading..."
+            ) : error ? (
+              "Error"
+            ) : netFunds !== null ? (
+              `${netFunds}`
+            ) : (
+              "0"
+            )}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
@@ -42,9 +50,9 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Total Brothers</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {loadingMembers ? (
+            {loading ? (
               "Loading..."
-            ) : memberError ? (
+            ) : error ? (
               "Error"
             ) : memberCount !== null ? (
               `${memberCount}`
@@ -71,7 +79,15 @@ export function SectionCards() {
             Total Chapter Funds
           </CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
+            {loading ? (
+              "Loading..."
+            ) : error ? (
+              "Error"
+            ) : totalFunds !== null ? (
+              `${totalFunds}`
+            ) : (
+              "0"
+            )}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
@@ -88,7 +104,15 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Outstanding Balance</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            4.5%
+            {loading ? (
+              "Loading..."
+            ) : error ? (
+              "Error"
+            ) : outstandingBalance !== null ? (
+              `${outstandingBalance}`
+            ) : (
+              "0"
+            )}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">

@@ -1,35 +1,46 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 
+type APIResponse = {
+  count: number
+  totalFunds: number
+  netFunds: number
+  outstandingBalance: number
+}
+
 export default function useCount() {
-    const [totalMemberCount, setTotalMemberCount] = useState<number | null>(null);
-    const [loadingMemberCount, setLoadingMemberCount] = useState(true);
-    const [errorMemberCount, setErrorMemberCount] = useState<Error | null>(null);
+    const [memberCount, setMemberCount] = useState<number | null>(null);
+    const [totalFunds, setTotalFunds] = useState<number | null>(null);
+    const [netFunds, setNetFunds] = useState<number | null>(null);
+    const [outstandingBalance, setOutstandingBalance] = useState<number | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
   
     useEffect(() => {
-      const fetchChapterMemberCount = async () => {
+      const fetchSectionCardData = async () => {
         try {
-          const response = await fetch('http://localhost:5173/api/retrieve-user-count');
-          if (!response.ok && response.status !== 304) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
+          const response = await axios.get<APIResponse>('http://localhost:5173/api/retrieve-section-card-info');
           if (response.status !== 304) {
-            const jsonData = await response.json();
-            setTotalMemberCount(jsonData.count);
+            setMemberCount(response.data.count);
+            setNetFunds(response.data.netFunds);
+            setTotalFunds(response.data.totalFunds);
+            setOutstandingBalance(response.data.outstandingBalance)
           }
+          console.log(response.data.count)
         } catch (err) {
           if (err instanceof Error) {
-            setErrorMemberCount(err);
+            setError(err);
           } else {
             console.error("An unexpected error occurred:", err);
-            setErrorMemberCount(new Error("An unexpected error occurred."));
+            setError(new Error("An unexpected error occurred."));
           }
         } finally {
-          setLoadingMemberCount(false);
+          setLoading(false);
         }
       };
   
-      fetchChapterMemberCount();
-    }, []);
+      fetchSectionCardData();
+    }, [memberCount]);
 
-    return { totalMemberCount, loadingMemberCount, errorMemberCount }
+    return { netFunds, totalFunds, outstandingBalance, memberCount, loading, error }
 }
