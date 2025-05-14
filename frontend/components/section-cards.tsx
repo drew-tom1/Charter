@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card"
 import { useState, useEffect } from "react";
 import useCount from "@/hooks/use-count";
+import { useListen } from "@/hooks/use-listen";
 
 export function SectionCards() {
   const { netFunds, totalFunds, outstandingBalance, memberCount, loading, error } = useCount()
