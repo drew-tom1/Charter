@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 type APIResponse = {
   count: number
@@ -16,8 +16,7 @@ export default function useCount() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
   
-    useEffect(() => {
-      const fetchSectionCardData = async () => {
+      const fetchSectionCardData = useCallback(async () => {
         try {
           const response = await axios.get<APIResponse>('http://localhost:5173/api/retrieve-section-card-info');
           if (response.status !== 304) {
@@ -37,10 +36,11 @@ export default function useCount() {
         } finally {
           setLoading(false);
         }
-      };
+      }, [memberCount]);
   
+    useEffect(() => {
       fetchSectionCardData();
-    }, [memberCount]);
+    }, [fetchSectionCardData]);
 
     return { netFunds, totalFunds, outstandingBalance, memberCount, loading, error }
 }
