@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createUser, deleteUser, retrieveAvailableFunds, retrieveListOfUsers, retrieveTotalBalance, retrieveUserCount } from '../services/userServices';
+import { createUser, deleteUser, retrieveAvailableFunds, retrieveListOfUsers, retrieveTotalBalance, retrieveUserCount, updateUser } from '../services/userServices';
 import { validateEmail } from '../utils/helper';
 import { User } from '../models/User';
 
@@ -30,16 +30,16 @@ export const initializeAccount = async (req: Request<{}, {}, User>, res: Respons
 };
 
 export const updateAccount = async (req: Request, res: Response): Promise<any> => {
-  const { name, dues } = req.body
+  const { id } = req.params
+  const { amount_paid, total_balance } = req.body
   
-  if (!name) {
-    return res.status(400).json({ message: 'Name is required' });
-  }
-  if (!dues) {
-    return res.status(400).json({ message: 'Amount of dues owed is required' });
+  if (!id) {
+    return res.status(400).json({ message: 'ID is required' });
   }
 
   try {
+    await updateUser(id, amount_paid, total_balance)
+    return res.status(200).json({ message: "Member successfully updated" })
 
   } catch (err) {
     console.log(err)
