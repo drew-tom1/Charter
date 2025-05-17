@@ -111,6 +111,7 @@ import memberInfo from '../helper/memberFormInfo.json'
 import { memberSchema } from "@/hooks/use-retriever"
 import useDelete from "@/hooks/use-delete"
 import { useListen } from "@/hooks/use-listen"
+import { User } from "@/helper/userModel"
 
 
 function DragHandle({ id }: { id: string }) {
@@ -767,6 +768,7 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
   const [amountPaid, setAmountPaid] = React.useState(0)
   const [email, setEmail] = React.useState('')
   const [name, setName] = React.useState('')
+  const [selectedMember, setSelectedMember] = React.useState<User | null>(null)
   const [submissionStatus, setSubmissionStatus] = React.useState<"success" | "error" | null>(null)
 
 
@@ -839,7 +841,7 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
             <DropdownMenuContent>
               {data.map((member) => {
                   return (
-                    <DropdownMenuItem key={member.id}>
+                    <DropdownMenuItem key={member.id} onClick={}>
                       {member.name}
                     </DropdownMenuItem>
                   )
@@ -866,7 +868,7 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
                 <Label htmlFor="type">Crossing Class</Label>
-                <Select onValueChange={handleCrossingClassChange}>
+                <Select value={crossingClass} onValueChange={handleCrossingClassChange}>
                   <SelectTrigger id="type" className="w-full">
                     <SelectValue placeholder="Select class" />
                   </SelectTrigger>
@@ -881,7 +883,7 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
               </div>
               <div className="flex flex-col gap-3">
                 <Label htmlFor="status">Status</Label>
-                <Select onValueChange={handleStatusChange}>
+                <Select value={status} onValueChange={handleStatusChange}>
                   <SelectTrigger id="status" className="w-full">
                     <SelectValue placeholder="Select a status" />
                   </SelectTrigger>
