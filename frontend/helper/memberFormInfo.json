@@ -9,8 +9,8 @@
       "Spring 2025"
     ],
     "statuses": [
-      "Active",
-      "Inactive",
-      "Co-Op / Study Abroad"
+      "active",
+      "inactive",
+      "co-op / study abroad"
     ]
 }

@@ -784,6 +784,16 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
     setStatus(status);
   };
 
+  const handleAutofill = (member: User) => {
+    setName(member.name)
+    setEmail(member.email)
+    setAmountPaid(member.amount_paid)
+    setTotalBalance(member.total_balance)
+    setCrossingClass(member.crossing_class)
+    setStatus(member.status)
+    console.log(member.status)
+  }
+
   const handleReset = () => {
     setName('');
     setEmail('');
@@ -841,7 +851,7 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
             <DropdownMenuContent>
               {data.map((member) => {
                   return (
-                    <DropdownMenuItem key={member.id} onClick={}>
+                    <DropdownMenuItem key={member.id} onClick={() => handleAutofill(member)}>
                       {member.name}
                     </DropdownMenuItem>
                   )
