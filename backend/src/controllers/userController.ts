@@ -31,14 +31,14 @@ export const initializeAccount = async (req: Request<{}, {}, User>, res: Respons
 
 export const updateAccount = async (req: Request, res: Response): Promise<any> => {
   const { id } = req.params
-  const { amount_paid, total_balance } = req.body
+  const { email, status, crossing_class, amount_paid, total_balance } = req.body
   
   if (!id) {
     return res.status(400).json({ message: 'ID is required' });
   }
 
   try {
-    await updateUser(id, amount_paid, total_balance)
+    await updateUser(id, email, status, crossing_class, amount_paid, total_balance)
     return res.status(200).json({ message: "Member successfully updated" })
 
   } catch (err) {

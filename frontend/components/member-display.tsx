@@ -759,7 +759,7 @@ function CreateNewMember() {
 }
 
 function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
-  console.log(data)
+  const [id, setID] = React.useState('')
   const isMobile = useIsMobile()
   const [isOpen, setIsOpen] = React.useState(false);
   const [crossingClass, setCrossingClass] = React.useState('')
@@ -785,16 +785,18 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
   };
 
   const handleAutofill = (member: User) => {
+    setID(member.id)
     setName(member.name)
     setEmail(member.email)
     setAmountPaid(member.amount_paid)
     setTotalBalance(member.total_balance)
     setCrossingClass(member.crossing_class)
     setStatus(member.status)
-    console.log(member.status)
+    console.log(member)
   }
 
   const handleReset = () => {
+    setID('')
     setName('');
     setEmail('');
     setAmountPaid(0);
@@ -808,7 +810,7 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const newUser = {
+    const updatedUser = {
       name,
       email,
       amount_paid: amountPaid,
@@ -818,12 +820,11 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
     }
 
     try {
-      await axios.post("http://localhost:5173/api/add-member", newUser)
+      await axios.patch(`http://localhost:5173/api/update-member/${id}`, updatedUser)
       setSubmissionStatus("success");
     } catch (err) {
       setSubmissionStatus("error");
     }
-    console.log(newUser)
   }
 
   return (
@@ -929,7 +930,7 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
               />
             </div>
             </div>
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Update</Button>
           </form>
           {submissionStatus === "success" && (
             <p className="text-green-600">Member added successfully!</p>

@@ -68,11 +68,11 @@ export const retrieveListOfUsers = async (): Promise<any> => {
   return data
 }
 
-export const updateUser = async (id: string, amount_paid: number | null, total_balance: number | null): Promise<any> => {
+export const updateUser = async (id: string, email: string | null, status: string | null, crossing_class: string | null, amount_paid: number | null, total_balance: number | null): Promise<any> => {
   
   const { data, error } = await supabase
     .from('users')
-    .update({ amount_paid, total_balance })
+    .update({ email, status, crossing_class, amount_paid, total_balance })
     .eq('id', id)
   
   if (error) { 
