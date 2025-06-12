@@ -113,6 +113,7 @@ import useDelete from "@/hooks/use-delete"
 import { useListen } from "@/hooks/use-listen"
 import { User } from "@/helper/userModel"
 
+const BASE_API_URL = process.env.API_URL || "http://localhost:4000/api"
 
 function DragHandle({ id }: { id: string }) {
   const { attributes, listeners } = useSortable({
@@ -274,8 +275,6 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit balance(s)</DropdownMenuItem>
-          <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onClick={() => handleDelete()}>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -651,7 +650,7 @@ function CreateNewMember() {
     }
 
     try {
-      await axios.post("http://localhost:5173/api/add-member", newUser)
+      await axios.post(`${BASE_API_URL}/add-member`, newUser)
       setSubmissionStatus("success");
     } catch (err) {
       setSubmissionStatus("error");
@@ -824,7 +823,7 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
     }
 
     try {
-      await axios.patch(`http://localhost:5173/api/update-member/${id}`, updatedUser)
+      await axios.patch(`${BASE_API_URL}/update-member/${id}`, updatedUser)
       setSubmissionStatus("success");
     } catch (err) {
       setSubmissionStatus("error");

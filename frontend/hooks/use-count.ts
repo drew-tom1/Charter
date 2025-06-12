@@ -8,6 +8,8 @@ type APIResponse = {
   outstandingBalance: number
 }
 
+const BASE_API_URL = process.env.API_URL || "http://localhost:4000/api";
+
 export default function useCount() {
     const [memberCount, setMemberCount] = useState<number | null>(null);
     const [totalFunds, setTotalFunds] = useState<number | null>(null);
@@ -18,7 +20,7 @@ export default function useCount() {
   
       const fetchSectionCardData = useCallback(async () => {
         try {
-          const response = await axios.get<APIResponse>('http://localhost:5173/api/retrieve-section-card-info');
+          const response = await axios.get<APIResponse>(`${BASE_API_URL}/retrieve-section-card-info`);
           if (response.status !== 304) {
             setMemberCount(response.data.count);
             setNetFunds(response.data.netFunds);

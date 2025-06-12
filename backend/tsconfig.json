@@ -6,7 +6,8 @@
     "outDir": "./dist",          // Compiles to the dist folder
     "rootDir": "./src",          // TypeScript source is in src folder
     "esModuleInterop": true,     // Allows default import of CommonJS modules
-    "strict": true               // Enforces strict type-checking
+    "strict": true,               // Enforces strict type-checking
+    "types": ["jest","node"],          // Include Node.js types
   },
   "include": ["src/**/*.ts", "src/server.ts"],    // Include all .ts files in src directory
   "exclude": ["node_modules"]    // Exclude node_modules folder

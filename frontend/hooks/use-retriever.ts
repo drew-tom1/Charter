@@ -20,6 +20,8 @@ type APIResponse = {
   usersList: unknown
 }
 
+const BASE_API_URL = process.env.API_URL || "http://localhost:4000/api"
+
 const useListRetriever = () => {
   const [data, setData] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +29,7 @@ const useListRetriever = () => {
 
     const fetchData = useCallback(async () => {
       try {
-        const result = await axios.get<APIResponse>("http://localhost:5173/api/retrieve-user-list");
+        const result = await axios.get<APIResponse>(`${BASE_API_URL}/retrieve-user-list`);
         const validated = memberArraySchema.parse(result.data.usersList);
         setData(validated);
         console.log(validated)
