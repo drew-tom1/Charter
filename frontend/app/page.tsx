@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Header from "../components/header";
 import outlinelogo_removebg_preview from "../public/outlinelogo-removebg-preview.png";
 import Link from "next/link";
 import "./styles/globals.css";

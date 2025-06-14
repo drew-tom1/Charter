@@ -33,7 +33,6 @@ import {
   IconLayoutColumns,
   IconLoader,
   IconPlus,
-  IconTrendingUp,
 } from "@tabler/icons-react"
 import {
   ColumnDef,
@@ -50,25 +49,17 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { toast } from "sonner"
 import { z } from "zod"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -79,7 +70,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -91,7 +81,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
 import {
   Table,
   TableBody,
@@ -654,6 +643,7 @@ function CreateNewMember() {
       setSubmissionStatus("success");
     } catch (err) {
       setSubmissionStatus("error");
+      console.log("LOGGING ERROR: ", err)
     }
     console.log(newUser)
   }
@@ -771,7 +761,7 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
   const [amountPaid, setAmountPaid] = React.useState(0)
   const [email, setEmail] = React.useState('')
   const [name, setName] = React.useState('')
-  const [selectedMember, setSelectedMember] = React.useState<User | null>(null)
+  // const [selectedMember, setSelectedMember] = React.useState<User | null>(null)
   const [submissionStatus, setSubmissionStatus] = React.useState<"success" | "error" | null>(null)
 
 
@@ -827,6 +817,7 @@ function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
       setSubmissionStatus("success");
     } catch (err) {
       setSubmissionStatus("error");
+      console.log("LOGGING ERROR: ", err)
     }
   }
 
