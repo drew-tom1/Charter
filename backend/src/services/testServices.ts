@@ -1,4 +1,4 @@
-import supabase from '../utils/supabase';
+import supabase from '../utils/supabase.js';
 
 export const testDatabaseConnection = async (): Promise<boolean> => {
   try {

@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { deleteAccount, initializeAccount, retrieveMemberList, retrieveSectionCardsInfo, updateAccount } from '../controllers/userController';
+import { deleteAccount, initializeAccount, retrieveMemberList, retrieveSectionCardsInfo, updateAccount } from '../controllers/userController.js';
 
 const userRouter: Router = express.Router();
 

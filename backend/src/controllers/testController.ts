@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { testDatabaseConnection } from "../services/testServices";
+import { testDatabaseConnection } from "../services/testServices.js";
 
 export const ping = async (req: Request, res: Response): Promise<any> => {
     return res.status(200).json({ message: "Ping Successful" });

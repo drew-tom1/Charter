@@ -1,6 +1,6 @@
-import supabase from '../utils/supabase';
-import { compileUserInfo, User } from '../models/User';
-import { Transaction } from '../models/Transaction';
+import supabase from '../utils/supabase.js';
+import { compileUserInfo, User } from '../models/User.js';
+import { Transaction } from '../models/Transaction.js';
 
 export const createUser = async (user: User): Promise<any> => {
   const { name, email, amount_paid, total_balance, crossing_class, status } = user

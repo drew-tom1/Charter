@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { createUser, deleteUser, retrieveAvailableFunds, retrieveListOfUsers, retrieveTotalBalance, retrieveUserCount, updateUser } from '../services/userServices';
-import { validateEmail } from '../utils/helper';
-import { User } from '../models/User';
+import { createUser, deleteUser, retrieveAvailableFunds, retrieveListOfUsers, retrieveTotalBalance, retrieveUserCount, updateUser } from '../services/userServices.js';
+import { validateEmail } from '../utils/helper.js';
+import { User } from '../models/User.js';
 
 export const initializeAccount = async (req: Request<{}, {}, User>, res: Response): Promise<any> => {
   const { name, email, amount_paid, total_balance, crossing_class, status } = req.body;

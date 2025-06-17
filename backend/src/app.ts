@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import userRoutes from './routes/userRoutes';
-import testRoutes from './routes/testRoutes';
+import userRoutes from './routes/userRoutes.js';
+import testRoutes from './routes/testRoutes.js';
 
 const app = express();
 
