@@ -47,6 +47,11 @@ const data = {
       url: "/transactions",
       icon: IconListDetails,
     },
+    {
+      title: "Budget Planner",
+      url: "/budget",
+      icon: IconFileWord
+    }
   ],
   navClouds: [
     {
@@ -115,19 +120,9 @@ const data = {
   ],
   documents: [
     {
-      name: "Data Library",
-      url: "#",
+      name: "Alumni Roster",
+      url: "/alumni",
       icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
     },
   ],
 }
