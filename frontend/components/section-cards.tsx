@@ -8,9 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import useCount from "@/hooks/use-count";
+import { useGetSectionCardInfoQuery } from "@/app/dashboard/redux/api";
 
 export function SectionCards() {
-  const { netFunds, totalFunds, outstandingBalance, memberCount, loading, error } = useCount()
+  const { data, isLoading: loading, isError, error } = useGetSectionCardInfoQuery()
 
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
@@ -22,8 +23,8 @@ export function SectionCards() {
               "Loading..."
             ) : error ? (
               "Error"
-            ) : netFunds !== null ? (
-              `${netFunds}`
+            ) : data.netFunds !== null ? (
+              `${data.netFunds}`
             ) : (
               "0"
             )}
@@ -43,8 +44,8 @@ export function SectionCards() {
               "Loading..."
             ) : error ? (
               "Error"
-            ) : memberCount !== null ? (
-              `${memberCount}`
+            ) : data.count !== null ? (
+              `${data.count}`
             ) : (
               "0"
             )}
@@ -66,8 +67,8 @@ export function SectionCards() {
               "Loading..."
             ) : error ? (
               "Error"
-            ) : totalFunds !== null ? (
-              `${totalFunds}`
+            ) : data.totalFunds !== null ? (
+              `${data.totalFunds}`
             ) : (
               "0"
             )}
@@ -85,8 +86,8 @@ export function SectionCards() {
               "Loading..."
             ) : error ? (
               "Error"
-            ) : outstandingBalance !== null ? (
-              `${outstandingBalance}`
+            ) : data.outstandingBalance !== null ? (
+              `${data.outstandingBalance}`
             ) : (
               "0"
             )}

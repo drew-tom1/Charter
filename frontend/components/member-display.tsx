@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import axios from "axios"
 import {
   DndContext,
   KeyboardSensor,
@@ -52,19 +51,9 @@ import {
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { useIsMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -95,14 +84,13 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-
-import memberInfo from '../helper/memberFormInfo.json'
-import { memberSchema } from "@/hooks/use-retriever"
-import useDelete from "@/hooks/use-delete"
 import { useListen } from "@/hooks/use-listen"
-import { User } from "@/helper/userModel"
+import { CreateNewMember } from "./functional/create-new-member-form"
+import { UpdateMember } from "./functional/update-member-form"
+import { memberSchema } from "@/helper/userModel"
+import { useDeleteTableEntryMutation } from "@/app/dashboard/redux/api"
 
-const BASE_API_URL = process.env.API_URL || "http://localhost:4000/api"
+
 
 function DragHandle({ id }: { id: string }) {
   const { attributes, listeners } = useSortable({
@@ -123,7 +111,8 @@ function DragHandle({ id }: { id: string }) {
   )
 }
 
-const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
+export function getColumns( deleteTableEntry: (id: string) => Promise<void> ): ColumnDef<z.infer<typeof memberSchema>>[] { 
+  return [
   {
     id: "drag",
     header: () => null,
@@ -249,8 +238,14 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const handleDelete = useDelete(row.original.id)
-
+      const handleDelete = async () => {
+        try {
+          await deleteTableEntry(row.original.id)
+          toast.success("deleted successfully")
+        } catch (err) {
+          toast.error("failed to delete")
+        }
+      } 
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -269,7 +264,7 @@ const columns: ColumnDef<z.infer<typeof memberSchema>>[] = [
       </DropdownMenu>
     )},
   },
-]
+]}
 
 function DraggableRow({ row }: { row: Row<z.infer<typeof memberSchema>> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
@@ -298,6 +293,7 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof memberSchema>> }) {
 
 export function DataTable({ data: initialData, }: { data: z.infer<typeof memberSchema>[] }) {
   const [data, setData] = React.useState(() => initialData)
+  const [deleteTableEntry, {isLoading, error}] = useDeleteTableEntryMutation();
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
@@ -315,6 +311,12 @@ export function DataTable({ data: initialData, }: { data: z.infer<typeof memberS
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   )
+
+  const deleteWrapper = async (id: string) => {
+    return deleteTableEntry(id).unwrap()
+  }
+
+  const columns = getColumns(deleteWrapper)
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => data?.map(({ id }) => id) || [],
@@ -593,358 +595,6 @@ export function DataTable({ data: initialData, }: { data: z.infer<typeof memberS
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
       </TabsContent>
     </Tabs>
-  )
-}
-
-function CreateNewMember() {
-  const isMobile = useIsMobile()
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [crossingClass, setCrossingClass] = React.useState('')
-  const [status, setStatus] = React.useState('')
-  const [totalBalance, setTotalBalance] = React.useState(0)
-  const [amountPaid, setAmountPaid] = React.useState(0)
-  const [email, setEmail] = React.useState('')
-  const [name, setName] = React.useState('')
-  const [submissionStatus, setSubmissionStatus] = React.useState<"success" | "error" | null>(null)
-
-
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-  };
-
-  const handleCrossingClassChange = (term: string) => {
-    setCrossingClass(term);
-  };
-
-  const handleStatusChange = (status: string) => {
-    setStatus(status);
-  };
-
-  const handleReset = () => {
-    setName('');
-    setEmail('');
-    setAmountPaid(0);
-    setTotalBalance(0);
-    setCrossingClass('');
-    setStatus('');
-    setSubmissionStatus(null);
-    setIsOpen(false);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const newUser = {
-      name,
-      email,
-      amount_paid: amountPaid,
-      total_balance: totalBalance,
-      status: status.toLowerCase(),
-      crossing_class: crossingClass 
-    }
-
-    try {
-      await axios.post(`${BASE_API_URL}/add-member`, newUser)
-      setSubmissionStatus("success");
-    } catch (err) {
-      setSubmissionStatus("error");
-      console.log("LOGGING ERROR: ", err)
-    }
-    console.log(newUser)
-  }
-
-  return (
-    <Drawer open={isOpen} onOpenChange={handleOpenChange} direction={isMobile ? "bottom" : "right"}>
-      <DrawerTrigger asChild>
-          <Button variant="outline" size="sm">
-            <IconPlus />
-            <span className="hidden lg:inline">Add New Member</span>
-          </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="gap-1">
-          <DrawerTitle>Create New Active Member</DrawerTitle>
-        </DrawerHeader>
-        <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="type">Crossing Class</Label>
-                <Select onValueChange={handleCrossingClassChange}>
-                  <SelectTrigger id="type" className="w-full">
-                    <SelectValue placeholder="Select class" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {memberInfo.terms.map((term) => (
-                      <SelectItem key={term} value={term}>
-                        {term}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="status">Status</Label>
-                <Select onValueChange={handleStatusChange}>
-                  <SelectTrigger id="status" className="w-full">
-                    <SelectValue placeholder="Select a status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {memberInfo.statuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="amountPaid">Amount Paid</Label>
-              <Input
-                id="amountPaid"
-                placeholder="opt."
-                type="number"
-                value={amountPaid}
-                onChange={(e) => setAmountPaid(Number(e.target.value))}
-              />
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="totalBalance">Total Balance</Label>
-              <Input
-                id="totalBalance"
-                placeholder="opt."
-                type="number"
-                value={totalBalance}
-                onChange={(e) => setTotalBalance(Number(e.target.value))}
-              />
-            </div>
-            </div>
-            <Button type="submit">Submit</Button>
-          </form>
-          {submissionStatus === "success" && (
-            <p className="text-green-600">Member added successfully!</p>
-          )}
-          {submissionStatus === "error" && (
-            <p className="text-red-600">Something went wrong. Please try again.</p>
-          )}
-        </div>
-        <DrawerFooter>
-          <DrawerClose asChild>
-            <Button variant="outline" onClick={handleReset}>Done</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  )
-}
-
-function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] }) {
-  const [id, setID] = React.useState('')
-  const isMobile = useIsMobile()
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [crossingClass, setCrossingClass] = React.useState('')
-  const [status, setStatus] = React.useState('')
-  const [totalBalance, setTotalBalance] = React.useState(0)
-  const [amountPaid, setAmountPaid] = React.useState(0)
-  const [email, setEmail] = React.useState('')
-  const [name, setName] = React.useState('')
-  // const [selectedMember, setSelectedMember] = React.useState<User | null>(null)
-  const [submissionStatus, setSubmissionStatus] = React.useState<"success" | "error" | null>(null)
-
-
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-  };
-
-  const handleCrossingClassChange = (term: string) => {
-    setCrossingClass(term);
-  };
-
-  const handleStatusChange = (status: string) => {
-    setStatus(status);
-  };
-
-  const handleAutofill = (member: User) => {
-    setID(member.id)
-    setName(member.name)
-    setEmail(member.email)
-    setAmountPaid(member.amount_paid)
-    setTotalBalance(member.total_balance)
-    setCrossingClass(member.crossing_class)
-    setStatus(member.status)
-    console.log(member)
-  }
-
-  const handleReset = () => {
-    setID('')
-    setName('');
-    setEmail('');
-    setAmountPaid(0);
-    setTotalBalance(0);
-    setCrossingClass('');
-    setStatus('');
-    setSubmissionStatus(null);
-    setIsOpen(false);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const updatedUser = {
-      name,
-      email,
-      amount_paid: amountPaid,
-      total_balance: totalBalance,
-      status: status.toLowerCase(),
-      crossing_class: crossingClass 
-    }
-
-    try {
-      await axios.patch(`${BASE_API_URL}/update-member/${id}`, updatedUser)
-      setSubmissionStatus("success");
-    } catch (err) {
-      setSubmissionStatus("error");
-      console.log("LOGGING ERROR: ", err)
-    }
-  }
-
-  return (
-    <Drawer open={isOpen} onOpenChange={handleOpenChange} direction={isMobile ? "bottom" : "right"}>
-      <DrawerTrigger asChild>
-          <Button variant="outline" size="sm">
-            <IconPlus />
-            <span className="hidden lg:inline">Update Member</span>
-          </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="gap-1">
-          <DrawerTitle>Update Existing Member</DrawerTitle>
-        </DrawerHeader>
-        <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <IconLayoutColumns />
-                <span className="hidden lg:inline">Select an Active</span>
-                <span className="lg:hidden">Select Active</span>
-                <IconChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {data.map((member) => {
-                  return (
-                    <DropdownMenuItem key={member.id} onClick={() => handleAutofill(member)}>
-                      {member.name}
-                    </DropdownMenuItem>
-                  )
-                })}
-            </DropdownMenuContent>
-        </DropdownMenu>
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="type">Crossing Class</Label>
-                <Select value={crossingClass} onValueChange={handleCrossingClassChange}>
-                  <SelectTrigger id="type" className="w-full">
-                    <SelectValue placeholder="Select class" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {memberInfo.terms.map((term) => (
-                      <SelectItem key={term} value={term}>
-                        {term}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="status">Status</Label>
-                <Select value={status} onValueChange={handleStatusChange}>
-                  <SelectTrigger id="status" className="w-full">
-                    <SelectValue placeholder="Select a status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {memberInfo.statuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="amountPaid">Amount Paid</Label>
-              <Input
-                id="amountPaid"
-                placeholder="opt."
-                type="number"
-                value={amountPaid}
-                onChange={(e) => setAmountPaid(Number(e.target.value))}
-              />
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="totalBalance">Total Balance</Label>
-              <Input
-                id="totalBalance"
-                placeholder="opt."
-                type="number"
-                value={totalBalance}
-                onChange={(e) => setTotalBalance(Number(e.target.value))}
-              />
-            </div>
-            </div>
-            <Button type="submit">Update</Button>
-          </form>
-          {submissionStatus === "success" && (
-            <p className="text-green-600">Member added successfully!</p>
-          )}
-          {submissionStatus === "error" && (
-            <p className="text-red-600">Something went wrong. Please try again.</p>
-          )}
-        </div>
-        <DrawerFooter>
-          <DrawerClose asChild>
-            <Button variant="outline" onClick={handleReset}>Done</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
   )
 }
 

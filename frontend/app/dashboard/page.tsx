@@ -10,13 +10,13 @@ import {
 } from "@/components/ui/sidebar"
 
 import { Skeleton } from "@/components/ui/skeleton"
-import useListRetriever from "@/hooks/use-retriever"
+import { useGetTableInfoQuery } from "./redux/api"
 
 export default function Page() {
-  const { data: fetchedData, loading, error } = useListRetriever()
+  const { data, isLoading: loading, isError, error } = useGetTableInfoQuery()
 
   if (error) {
-    console.log("Something went wrong. (useListRetriever inside Dashboard)")
+    console.log("Something went wrong. RTK Query for Table")
     console.log(error)
   }
 
@@ -40,8 +40,8 @@ export default function Page() {
                 <div className="flex flex-col gap-2">
                   <Skeleton className="h-" />
                 </div>
-              ) : fetchedData ? (
-                <DataTable data={fetchedData} />
+              ) : data ? (
+                <DataTable data={data.usersList} />
               ) : (
                 <div>No member data available.</div>
               )}
