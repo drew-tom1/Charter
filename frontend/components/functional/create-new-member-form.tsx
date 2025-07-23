@@ -41,6 +41,10 @@ export function CreateNewMember() {
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
+
+    if (!open) {
+      handleReset();
+    };
   };
 
   const handleCrossingClassChange = (term: string) => {
@@ -121,7 +125,7 @@ export function CreateNewMember() {
                   <SelectTrigger id="type" className="w-full">
                     <SelectValue placeholder="Select class" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     {memberInfo.terms.map((term) => (
                       <SelectItem key={term} value={term}>
                         {term}
@@ -136,7 +140,7 @@ export function CreateNewMember() {
                   <SelectTrigger id="status" className="w-full">
                     <SelectValue placeholder="Select a status" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     {memberInfo.statuses.map((status) => (
                       <SelectItem key={status} value={status}>
                         {status}
