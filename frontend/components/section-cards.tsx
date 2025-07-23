@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import useCount from "@/hooks/use-count";
 import { useGetSectionCardInfoQuery } from "@/app/dashboard/redux/api";
 
 export function SectionCards() {

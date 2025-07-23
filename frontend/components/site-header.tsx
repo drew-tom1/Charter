@@ -17,6 +17,12 @@ export function SiteHeader() {
     if (pathname === '/transactions') {
       setLocationText('Transaction Ledger')
     }
+    if (pathname === '/alumni') {
+      setLocationText('Alumni Archives')
+    }
+    if (pathname === '/budget') {
+      setLocationText('Budget Planner')
+    }
 
   }, [pathname])
   return (

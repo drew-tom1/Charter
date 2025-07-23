@@ -54,7 +54,6 @@ export default function AlumniRosterPage() {
 
         <div className="p-6 space-y-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">Alumni Roster</h1>
             <Button onClick={() => setOpen(true)}>+ Add Alumni</Button>
           </div>
 

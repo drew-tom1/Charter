@@ -1,17 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Alumni } from "@/helper/alumniModel"
 
-interface Alumni {
-  id: string
-  name: string
-  contact: string
-  company: string
-  designation: string
-  category: string
-  onDelete: (id: string) => void
-}
-
-export function AlumniCard({ id, name, contact, company, designation, category, onDelete }: Alumni) {
+export function AlumniCard({ id, name, contact, company, designation, category }: Alumni) {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
