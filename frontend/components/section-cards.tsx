@@ -74,7 +74,7 @@ export function SectionCards() {
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="text-muted-foreground">total amt expected from members</div>
+          <div className="text-muted-foreground">total from members + fundraising</div>
         </CardFooter>
       </Card>
       <Card className="@container/card">

@@ -9,8 +9,9 @@
       "Spring 2025"
     ],
     "statuses": [
-      "active",
-      "inactive",
-      "co-op / study abroad"
+      { "value": "active", "label": "Active Members" },
+      { "value": "inactive", "label": "Inactive Members" },
+      { "value": "co-op / study abroad", "label": "Co-Op / Study Abroad" },
+      { "value": "alumni", "label": "Registered Alumni" }
     ]
 }

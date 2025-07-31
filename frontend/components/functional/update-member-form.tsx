@@ -104,7 +104,7 @@ export function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] })
   return (
     <Drawer open={isOpen} onOpenChange={handleOpenChange} direction={isMobile ? "bottom" : "right"}>
       <DrawerTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="cursor-pointer transition-colors">
             <IconPlus />
             <span className="hidden lg:inline">Update Member</span>
           </Button>
@@ -173,9 +173,9 @@ export function UpdateMember({ data }: { data: z.infer<typeof memberSchema>[] })
                     <SelectValue placeholder="Select a status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {memberInfo.statuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status}
+                    {memberInfo.statuses.map((status, index) => (
+                      <SelectItem key={index} value={status.value}>
+                        {status.value}
                       </SelectItem>
                     ))}
                   </SelectContent>
