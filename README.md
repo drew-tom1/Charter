@@ -1,15 +1,18 @@
-# TreasureChest
+# Charter - Omega Epsilon
 Dues tracking software with planned implementation of Chapter Management tooling. Built in-house by active members of the Omega Epsilon Chapter of Theta Tau at SJSU.
 
 Current implementation:
-- Tracking general information (status, balances, class)
+- Budget planning
+- General membership management (statuses, balances, etc)
+- Dues management
 
 Future Implementation:
 - Transaction Ledger
 - Alumni Registry
-
-v0.1 (6/13/25)
-- added docker support
+- Automated Notification System for Late Dues via Amazon SNS
+- Cloud Deployment with Docker, AWS, Vercel
+- Migrate to Neon + Better Auth setup for more control over systems infrastructure.
+- Authentication flow for Treasurers, Regent.
 
 ## Starting application:
 

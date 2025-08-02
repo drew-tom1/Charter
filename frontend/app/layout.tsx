@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Treasure Chest",
+  title: "Spartan Charter",
   description: "Omega Epsilon Chapter of Theta Tau - Chapter Software",
 };
 

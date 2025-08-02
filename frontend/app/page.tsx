@@ -6,7 +6,6 @@ import "./styles/globals.css";
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#5c1f1f] via-[#3d1414] to-[#5c1f1f] text-white px-6">
-      {/* Logo */}
       <div className="mb-6 flex flex-col items-center">
         <Image
           src={outlinelogo_removebg_preview}
@@ -17,7 +16,6 @@ export default function Home() {
         />
       </div>
 
-      {/* Title */}
       <div className="text-center max-w-lg">
         <h1 className="text-3xl font-bold tracking-wide mb-2 text-[#F8E16C]">
           Theta Tau - Omega Epsilon
@@ -28,7 +26,6 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Call to Action */}
       <div className="mt-10">
         <Link href="/login">
           <button className="bg-transparent hover:bg-[#b22222]/10 transition-colors text-[#F8E16C] font-medium py-2 px-6 rounded-full shadow-md border border-[#F8E16C]/70 cursor-pointer">

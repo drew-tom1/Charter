@@ -1,6 +1,7 @@
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
+import { useEffect, useState } from "react"
 import { DataTable } from "@/components/member-display"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
@@ -11,13 +12,25 @@ import {
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { useGetTableInfoQuery } from "./redux/api"
+import { useGetAuthSessionQuery } from "@/utils/auth-api"
+import { useProtectedPage } from "@/hooks/use-protected-page"
 
 export default function Page() {
-  const { data, isLoading: loading, isError, error } = useGetTableInfoQuery()
+  const { session, isLoading, isError } = useProtectedPage()
+  const { data: tableData, isLoading: isTableDataLoading, isError: isTableDataError, error: tableDataError } = useGetTableInfoQuery()
 
-  if (error) {
+  if (tableDataError) {
     console.log("Something went wrong. RTK Query for Table")
-    console.log(error)
+    console.log(tableDataError)
+  }
+
+  if (!session) {
+    return null // redirect is handled by useProtectedPage
+  }
+  
+  const sidebarUser = {
+    name: session.user.user_metadata?.full_name || "User",
+    email: session.user.email || "",
   }
 
   return (
@@ -29,19 +42,19 @@ export default function Page() {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar user={sidebarUser} variant="inset" />
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <SectionCards />
-              {loading ? (
+              {isTableDataLoading ? (
                 <div className="flex flex-col gap-2">
                   <Skeleton className="h-" />
                 </div>
-              ) : data ? (
-                <DataTable data={data.usersList} />
+              ) : tableData ? (
+                <DataTable data={tableData.usersList} />
               ) : (
                 <div>No member data available.</div>
               )}
