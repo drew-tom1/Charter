@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useProtectedPage } from "@/hooks/use-protected-page"
 
 interface Alumni {
   id: string
@@ -20,6 +21,7 @@ interface Alumni {
 }
 
 export default function AlumniRosterPage() {
+  const { session, isLoading, isError } = useProtectedPage()
   const [alumniList, setAlumniList] = useState<Alumni[]>([])
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState<Omit<Alumni, "id">>({
@@ -29,6 +31,10 @@ export default function AlumniRosterPage() {
     designation: "",
   })
 
+  if (!session) {
+    return null // redirect is handled by useProtectedPage
+  }
+
   const handleAdd = () => {
     setAlumniList([...alumniList, { ...form, id: uuidv4() }])
     setForm({ name: "", contact: "", job: "", designation: "" })
@@ -36,7 +42,12 @@ export default function AlumniRosterPage() {
   }
 
   const handleDelete = (id: string) => {
-    setAlumniList(alumniList.filter((a) => a.id !== id))
+    return null
+  }
+
+  const sidebarUser = {
+    name: session.user.user_metadata?.full_name || "User",
+    email: session.user.email || "",
   }
 
   return (
@@ -48,7 +59,7 @@ export default function AlumniRosterPage() {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar user={sidebarUser} variant="inset" />
       <SidebarInset>
         <SiteHeader />
 

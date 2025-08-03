@@ -24,11 +24,12 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { useGetSectionCardInfoQuery } from "../dashboard/redux/api"
 import { useGetBudgetQuery, useUpdateBudgetMutation } from "./redux/api"
 import { Allocations } from "@/helper/budgetModel"
+import { useProtectedPage } from "@/hooks/use-protected-page"
 
 const COLORS = ["#4f46e5", "#22c55e", "#f97316", "#14b8a6", "#f43f5e"]
 
 export default function Page() {
-
+    const { session, isLoading, isError } = useProtectedPage()
     const {data: demographicData, isLoading: isDemographicLoading, isError: isDemographicError, error: demographicError} = useGetSectionCardInfoQuery();
     const {data: budgetData, isLoading: isBudgetLoading, isError: IsBudgetError, error: budgetError} = useGetBudgetQuery();
     const [updateBudget, {isLoading: updateLoading, error: updateError}] = useUpdateBudgetMutation();
@@ -72,6 +73,15 @@ export default function Page() {
         }
     }
 
+    if (!session) {
+        return null // redirect is handled by useProtectedPage
+    }
+
+    const sidebarUser = {
+        name: session.user.user_metadata?.full_name || "User",
+        email: session.user.email || "",
+    }
+
     return (
         <SidebarProvider
         style={
@@ -81,7 +91,7 @@ export default function Page() {
             } as React.CSSProperties
         }
         >
-        <AppSidebar variant="inset" />
+        <AppSidebar user={sidebarUser} variant="inset" />
         <SidebarInset>
             <SiteHeader />
 

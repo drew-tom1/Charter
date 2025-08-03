@@ -13,7 +13,7 @@ export function useProtectedPage() {
     if (!isLoading && isError) {
       const status = (error as any)?.status
       if (status === 401) {
-        router.push("/unauthorized")
+        router.push("/login")
       }
     }
   }, [isLoading, isError, error, router])

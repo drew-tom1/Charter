@@ -1,7 +1,6 @@
 "use client"
-
+import { useProtectedPage } from "@/hooks/use-protected-page"
 import { AppSidebar } from "@/components/app-sidebar"
-import { useEffect, useState } from "react"
 import { DataTable } from "@/components/member-display"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
@@ -12,8 +11,7 @@ import {
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { useGetTableInfoQuery } from "./redux/api"
-import { useGetAuthSessionQuery } from "@/utils/auth-api"
-import { useProtectedPage } from "@/hooks/use-protected-page"
+
 
 export default function Page() {
   const { session, isLoading, isError } = useProtectedPage()
