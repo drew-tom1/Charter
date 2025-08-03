@@ -1,4 +1,4 @@
-import supabase from "../utils/supabase";
+import supabase from "../utils/supabase.js";
 import { Budget } from "../models/Budget";
 
 export const retrieveBudget = async (): Promise<any> => {
