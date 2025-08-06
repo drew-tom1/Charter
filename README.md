@@ -1,5 +1,7 @@
-# Charter - Omega Epsilon
+# Charter - Omega Epsilon 
 Dues tracking software with planned implementation of Chapter Management tooling. Built in-house by active members of the Omega Epsilon Chapter of Theta Tau at SJSU.
+
+[project doc](https://docs.google.com/document/d/1z0bv43UFDDDxrCZYHH-YiTgz-dcHAbLRyEr7b_KRQTg/edit?tab=t.0#heading=h.7p9s3de6mzdz)
 
 Current implementation:
 - Budget planning
